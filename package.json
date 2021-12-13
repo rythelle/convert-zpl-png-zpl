@@ -1,0 +1,25 @@
+{
+  "name": "convertzpltopng",
+  "version": "1.0.0",
+  "description": "Converte arquivo ZPL em PNG",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rythelle C. Pereira",
+  "license": "ISC",
+  "dependencies": {
+    "delay": "^5.0.0",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "jimp": "^0.16.1",
+    "line-reader": "^0.4.0",
+    "net": "^1.0.2",
+    "pngjs": "^6.0.0",
+    "printer": "^0.4.0",
+    "request": "^2.88.2",
+    "util": "^0.12.4",
+    "zlib": "^1.0.5",
+    "zpl-image": "^0.1.2"
+  }
+}
