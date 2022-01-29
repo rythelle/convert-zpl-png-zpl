@@ -1,32 +1,34 @@
-const fs = require('fs'); //Biblioteca File System
-const PNG = require('pngjs').PNG; //Biblioteca para trabalhar com imagens tipo PNG
-const rgbaToZ64 = require('zpl-image').rgbaToZ64; //Biblioteca que transforma imagem em ZPL
-const path = require("path"); //Biblioteca de caminhos de arquivos
-var printer = require('printer');
-util = require('util');
+const fs = require("fs");
+const PNG = require("pngjs").PNG;
+const rgbaToZ64 = require("zpl-image").rgbaToZ64;
+const path = require("path");
 
-const numpecapath = path.resolve("../NumeroPecaNodeJS.txt"); //Monta o caminho de onde está localizada o arquivo que armazena o número da peça escrita pelo InduSoft
+const pathNum = path.resolve("../NumNodeJS.txt");
 
-//Lê o número da peça atual, escrita pela InduSoft
-try{
-    var numpeca = fs.readFileSync(numpecapath, 'utf8')
+try {
+  var num = fs.readFileSync(pathNum, "utf8");
 } catch (err) {
-    console.log(err);
+  console.log(err);
 }
 
-let buf = fs.readFileSync('../print/Etiqueta_Entrada/' + numpeca + '.png'); //Leio o PNG e os dados tipo Buffer
-let png = PNG.sync.read(buf); //Leio o dados tipo Buffer e converto eles para códigos RGBA e dados para montar o ZPL
-let res = rgbaToZ64(png.data, png.width, { black:50, rotate:'L' }); //Monto o ZPL
+let buf = fs.readFileSync("../print/path-label/" + num + ".png");
+let png = PNG.sync.read(buf);
+let res = rgbaToZ64(png.data, png.width, { black: 50, rotate: "L" });
 
-//res.length é o comprimento GRF descompactado
-//res.rowlen é o comprimento da linha GRF
-//res.z64 é a string codificada em Z64
+//res.length is the uncompressed GRF length
+//res.rowlen is the length of the GRF line
+//res.z64 is the Z64 encoded string
 let zpl_convert = `^XA^LH0,0^FS^FWN^FS^MMP^FS^PON^FS^PMN^FS^PW549^LL1422^FS^LRN^FS^FO0,0^GFA,${res.length},${res.length},${res.rowlen},${res.z64}^FS^PQ1^XZ`; //^XA^LH0,0^FWN^PON^PMN^LRN^FO10,10^GFA ^PQ1,0,1,Y^XZ ^PW1420^LL1422 ^PW549^LL1422  ~CD,~CC^~CT~
 
-fs.writeFile('../print/Etiqueta_Entrada/' + numpeca + '.zpl', zpl_convert,{enconding:'base64',flag: 'w'}, function (err) {
+fs.writeFile(
+  "../print/Entry-Label/" + num + ".zpl",
+  zpl_convert,
+  { encoding: "base64", flag: "w" },
+  function (err) {
     if (err) {
-        console.log('Erro na Escrita!');
-    }else{
-        console.log('Arquivo salvo!');
+      console.log("Writing error");
+    } else {
+      console.log("Saved file");
     }
-});
+  }
+);
